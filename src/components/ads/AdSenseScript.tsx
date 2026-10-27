@@ -4,7 +4,9 @@ import { usePathname } from 'next/navigation'
 import { ADSENSE_CLIENT } from '@/lib/ads'
 
 // Pages où AdSense est désactivé
-const PAGES_SANS_ADS = ['/rechercher']
+// Plus aucune page exclue : /rechercher l'était jusqu'à la pose du bloc
+// tp-recherche-milieu, qui a besoin que adsbygoogle.js y soit servi.
+const PAGES_SANS_ADS: string[] = []
 
 export default function AdSenseScript() {
   const pathname = usePathname()

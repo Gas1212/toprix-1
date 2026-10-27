@@ -23,15 +23,19 @@ const BOUTIQUES_LABEL: Record<string, string> = {
 // ─── Bloc AdSense dans la grille ──────────────────────────────────────────────
 
 /**
- * Rang après lequel insérer le bloc publicitaire.
+ * Rang par défaut après lequel insérer le bloc publicitaire (pages marque et
+ * catégories).
  *
  * Le plan de pose demande « après le 8e à 12e produit », entre deux rangées,
  * sans désaligner les cartes. Dans cet intervalle, 12 est la seule valeur
  * divisible par 2, 3 et 4 — les trois largeurs de la grille (mobile, lg, xl).
  * Le bloc tombe donc toujours après une rangée complète, à tous les points de
  * rupture. Avec 8 ou 10, la grille à 3 ou 4 colonnes couperait une rangée.
+ *
+ * /rechercher impose 5, qui n'est divisible par aucune des trois largeurs :
+ * le bloc y laisse des cellules vides en fin de rangée. Voir la prop adApres.
  */
-const AD_APRES = 12
+const AD_APRES_DEFAUT = 12
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 
@@ -45,11 +49,13 @@ interface FilteredProductsSectionProps {
   hideBrand?: boolean
   hideCategorie?: boolean
   showQ?: string
-  /**
-   * data-ad-slot du bloc à insérer dans la grille. Omis = aucun bloc.
-   * Laissé vide sur /rechercher, qui ne charge pas adsbygoogle.js.
-   */
+  /** data-ad-slot du bloc à insérer dans la grille. Omis = aucun bloc. */
   adSlot?: string
+  /**
+   * Rang après lequel poser le bloc. Défaut 12 (marque et catégories),
+   * 5 sur /rechercher comme demandé par le plan de pose.
+   */
+  adApres?: number
 }
 
 // ─── Helper : construire l'URL sans navigation ────────────────────────────────
@@ -83,6 +89,7 @@ export default function FilteredProductsSection({
   hideCategorie = false,
   showQ,
   adSlot,
+  adApres = AD_APRES_DEFAUT,
 }: FilteredProductsSectionProps) {
   const [filters, setFilters] = useState<FilterState>({ ...EMPTY_FILTERS, ...initialFilters })
   const [products, setProducts] = useState<Produit[]>(initialProducts)
@@ -319,7 +326,7 @@ export default function FilteredProductsSection({
                 <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5">
                   {products.flatMap((p, i) => {
                     const carte = <CarteProduit key={p.id} produit={p} />
-                    const poser = adSlot && i === AD_APRES - 1 && products.length > AD_APRES
+                    const poser = adSlot && i === adApres - 1 && products.length > adApres
                     if (!poser) return [carte]
                     // Clé stable : sans elle, le bloc serait démonté puis remonté
                     // à chaque changement de filtre ou de page, et redemanderait

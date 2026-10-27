@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Search } from 'lucide-react'
 import { getProduits } from '@/lib/api/produits'
 import FilteredProductsSection from '@/components/product/FilteredProductsSection'
+import { AD_SLOTS } from '@/lib/ads'
 
 export const dynamic = 'force-dynamic'
 
@@ -125,6 +126,8 @@ export default async function RechercherPage({ searchParams }: Props) {
               en_stock: en_stock === '1',
               tri,
             }}
+            adSlot={AD_SLOTS.rechercheMilieu}
+            adApres={5}
             hideBrand={false}
             hideCategorie={false}
             showQ={q}
