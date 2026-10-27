@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { SlidersHorizontal, X, Tag, Package, ArrowUpDown } from 'lucide-react'
 import CarteProduit from '@/components/product/CarteProduit'
+import AdSlot from '@/components/ads/AdSlot'
 import Pagination from '@/components/ui/Pagination'
 import FilterSidebar, { FilterState, EMPTY_FILTERS, PARENT_CATEGORIES } from '@/components/product/FilterSidebar'
 import { getProduits } from '@/lib/api/produits'
@@ -19,6 +20,19 @@ const BOUTIQUES_LABEL: Record<string, string> = {
   mytek: 'Mytek', tunisianet: 'Tunisianet', spacenet: 'Spacenet',
 }
 
+// ─── Bloc AdSense dans la grille ──────────────────────────────────────────────
+
+/**
+ * Rang après lequel insérer le bloc publicitaire.
+ *
+ * Le plan de pose demande « après le 8e à 12e produit », entre deux rangées,
+ * sans désaligner les cartes. Dans cet intervalle, 12 est la seule valeur
+ * divisible par 2, 3 et 4 — les trois largeurs de la grille (mobile, lg, xl).
+ * Le bloc tombe donc toujours après une rangée complète, à tous les points de
+ * rupture. Avec 8 ou 10, la grille à 3 ou 4 colonnes couperait une rangée.
+ */
+const AD_APRES = 12
+
 // ─── Props ────────────────────────────────────────────────────────────────────
 
 interface FilteredProductsSectionProps {
@@ -31,6 +45,11 @@ interface FilteredProductsSectionProps {
   hideBrand?: boolean
   hideCategorie?: boolean
   showQ?: string
+  /**
+   * data-ad-slot du bloc à insérer dans la grille. Omis = aucun bloc.
+   * Laissé vide sur /rechercher, qui ne charge pas adsbygoogle.js.
+   */
+  adSlot?: string
 }
 
 // ─── Helper : construire l'URL sans navigation ────────────────────────────────
@@ -63,6 +82,7 @@ export default function FilteredProductsSection({
   hideBrand = false,
   hideCategorie = false,
   showQ,
+  adSlot,
 }: FilteredProductsSectionProps) {
   const [filters, setFilters] = useState<FilterState>({ ...EMPTY_FILTERS, ...initialFilters })
   const [products, setProducts] = useState<Produit[]>(initialProducts)
@@ -297,7 +317,15 @@ export default function FilteredProductsSection({
             {products.length > 0 ? (
               <>
                 <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5">
-                  {products.map((p) => <CarteProduit key={p.id} produit={p} />)}
+                  {products.flatMap((p, i) => {
+                    const carte = <CarteProduit key={p.id} produit={p} />
+                    const poser = adSlot && i === AD_APRES - 1 && products.length > AD_APRES
+                    if (!poser) return [carte]
+                    // Clé stable : sans elle, le bloc serait démonté puis remonté
+                    // à chaque changement de filtre ou de page, et redemanderait
+                    // une annonce à chaque fois.
+                    return [carte, <AdSlot key="tp-liste-milieu" slot={adSlot} inGrid />]
+                  })}
                 </div>
                 {meta && meta.total_pages > 1 && (
                   <Pagination

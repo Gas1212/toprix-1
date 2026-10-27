@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import FilteredProductsSection from '@/components/product/FilteredProductsSection'
 import FAQSection from '@/components/ui/FAQSection'
+import { AD_SLOTS } from '@/lib/ads'
 import { getFAQsForBrand, buildFaqJsonLd } from '@/lib/faq-utils'
 
 export const dynamic = 'force-dynamic'
@@ -134,6 +135,7 @@ export default async function MarqueDetailPage({ params, searchParams }: Props) 
           }}
           hideBrand={true}
           hideCategorie={false}
+          adSlot={AD_SLOTS.listeMilieu}
         />
 
         <FAQSection faqs={faqs} />
