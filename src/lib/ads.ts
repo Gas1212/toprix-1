@@ -1,19 +1,34 @@
 // Configuration AdSense — blocs manuels.
 //
-// Les Auto Ads sont exclues de /marque et /categories : Google y injectait un
-// <div class="google-auto-placed"> comme enfant direct de la rangée flex
-// « filtres + grille », où il devenait un 3e flex item et écrasait la colonne
-// produits (flex-1 min-w-0). Ces pages utilisent donc des blocs placés
-// explicitement, hors de cette rangée, dans un conteneur pleine largeur.
+// Les Auto Ads sont exclues de /marque et /categories côté console AdSense :
+// Google y injectait un <div class="google-auto-placed"> comme enfant direct de
+// la rangée flex « filtres + grille », où il devenait un 3e flex item et
+// écrasait la colonne produits (flex-1 min-w-0).
 //
-// Un identifiant vide = bloc non rendu : aucun <ins> dans le DOM, donc aucune
-// erreur AdSense tant que le bloc n'a pas été créé côté console.
+// Règle de pose : un seul bloc par page, jamais accolé à un bouton
+// « Voir l'offre » ou « Comparer ».
 
 export const ADSENSE_CLIENT = 'ca-pub-8451378376537532'
 
 export const AD_SLOTS = {
-  /** Bloc horizontal entre le fil d'Ariane et la grille produits */
-  listeHaut: '',
-  /** Bloc horizontal entre la grille produits et la FAQ */
-  listeBas: '',
+  /**
+   * tp-produit-bas — fiche /produit/[slug], sous le tableau comparatif des
+   * offres et au-dessus des produits similaires. ACTIF.
+   */
+  produitBas: '5015720549',
+
+  /**
+   * tp-liste-milieu — pages /marque et /categories, dans la grille produits
+   * après le 8e à 12e article, sur toute la largeur (tp-ad--grid).
+   * PAS ENCORE POSÉ : prévu à partir du 30/10/2026, sur feu vert explicite.
+   */
+  listeMilieu: '7215130596',
+
+  /**
+   * tp-recherche-milieu — /rechercher, après le 5e résultat, pleine largeur.
+   * PAS ENCORE POSÉ : facultatif, à partir du 17/11/2026.
+   * Nécessitera de retirer '/rechercher' de PAGES_SANS_ADS dans
+   * AdSenseScript.tsx, sans quoi le chargeur adsbygoogle.js n'y est pas servi.
+   */
+  rechercheMilieu: '6369164810',
 } as const

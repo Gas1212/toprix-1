@@ -6,12 +6,16 @@ import { ADSENSE_CLIENT } from '@/lib/ads'
 interface Props {
   /** data-ad-slot du bloc créé dans la console AdSense. Vide = rien n'est rendu. */
   slot: string
-  /** Mention de transparence exigée par les règles AdSense. */
-  label?: string
+  /**
+   * true quand le bloc est inséré entre deux rangées d'une grille de produits :
+   * ajoute tp-ad--grid pour qu'il occupe toute la largeur sans désaligner les
+   * cartes. Le conteneur parent doit être la grille elle-même.
+   */
+  inGrid?: boolean
   className?: string
 }
 
-export default function AdSlot({ slot, label = 'Publicité', className = '' }: Props) {
+export default function AdSlot({ slot, inGrid = false, className = '' }: Props) {
   const insRef = useRef<HTMLModElement>(null)
   const pushed = useRef(false)
 
@@ -57,9 +61,12 @@ export default function AdSlot({ slot, label = 'Publicité', className = '' }: P
 
   if (!slot) return null
 
+  // La hauteur réservée et le repli quand l'annonce n'est pas servie sont gérés
+  // par .tp-ad dans globals.css.
+  const classes = ['tp-ad', inGrid ? 'tp-ad--grid' : '', className].filter(Boolean).join(' ')
+
   return (
-    <div className={`my-6 ${className}`}>
-      <p className="text-[10px] uppercase tracking-widest text-[#94A3B8] mb-1.5">{label}</p>
+    <div className={classes}>
       <ins
         ref={insRef}
         className="adsbygoogle"

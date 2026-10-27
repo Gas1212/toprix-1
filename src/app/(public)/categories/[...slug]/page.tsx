@@ -6,8 +6,6 @@ import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import FilteredProductsSection from '@/components/product/FilteredProductsSection'
 import FAQSection from '@/components/ui/FAQSection'
-import AdSlot from '@/components/ads/AdSlot'
-import { AD_SLOTS } from '@/lib/ads'
 import { getFAQsForCategory, buildFaqJsonLd } from '@/lib/faq-utils'
 
 export const dynamic = 'force-dynamic'
@@ -232,11 +230,6 @@ export default async function CategorieDetailPage({ params, searchParams }: Prop
           </div>
         )}
 
-        {/* Blocs AdSense manuels — hors de la rangée flex filtres + grille,
-            dans un conteneur pleine largeur : leur largeur ne peut pas être nulle
-            et ils ne peuvent pas écraser la colonne produits. */}
-        <AdSlot slot={AD_SLOTS.listeHaut} />
-
         {/* Filtres + produits CSR */}
         <FilteredProductsSection
           initialProducts={produits}
@@ -254,8 +247,6 @@ export default async function CategorieDetailPage({ params, searchParams }: Prop
           hideCategorie={true}
           hideBrand={false}
         />
-
-        <AdSlot slot={AD_SLOTS.listeBas} />
 
         <FAQSection faqs={faqs} />
       </div>

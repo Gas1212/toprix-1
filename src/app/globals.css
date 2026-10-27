@@ -81,3 +81,25 @@ h1,h2,h3,h4,h5,h6 {
   position: relative;
   z-index: 1;
 }
+
+/* ─── Blocs AdSense manuels ───
+   Hauteur réservée avant que l'annonce ne soit servie, pour éviter que le
+   contenu ne saute au chargement. */
+.tp-ad {
+  min-height: 250px;
+  margin: 24px 0;
+}
+
+/* Bloc inséré dans une grille de produits : occupe toute la largeur de la
+   grille, entre deux rangées, sans désaligner les cartes. */
+.tp-ad--grid {
+  grid-column: 1 / -1;
+}
+
+/* AdSense pose data-ad-status="unfilled" quand aucune annonce n'est servie.
+   On replie alors le conteneur : laisser 250 px de vide serait pire que le
+   repli. Masquer un slot *non servi* est permis par les règles AdSense —
+   contrairement au masquage d'une annonce effectivement affichée. */
+.tp-ad:has(ins[data-ad-status='unfilled']) {
+  display: none;
+}

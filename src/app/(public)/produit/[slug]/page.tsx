@@ -3,6 +3,8 @@ import { getProduit, getProduits } from '@/lib/api/produits'
 import type { Produit } from '@/types'
 import { notFound } from 'next/navigation'
 import CarteProduit from '@/components/product/CarteProduit'
+import AdSlot from '@/components/ads/AdSlot'
+import { AD_SLOTS } from '@/lib/ads'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
@@ -355,6 +357,10 @@ export default async function ProduitDetailPage({ params }: Props) {
             )}
           </div>
         </div>
+
+        {/* ── tp-produit-bas ── sous le tableau comparatif, au-dessus des
+            produits similaires. Seul bloc AdSense de cette page. */}
+        <AdSlot slot={AD_SLOTS.produitBas} />
 
         {/* ── Produits similaires ── */}
         {similaires.length > 0 && (
