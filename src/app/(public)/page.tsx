@@ -290,7 +290,7 @@ export default async function AccueilPage() {
               <h2 className="font-heading text-2xl md:text-3xl" style={{ color: 'white' }}>Chauffage &amp; Fin d’année 2026</h2>
             </div>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 
             <Link href="/rechercher?q=chauffage&tri=prix_asc"
               className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#7C2D12] to-[#1E293B] p-6 border border-white/10 hover:border-[#FB923C]/50 transition-all">
@@ -304,38 +304,17 @@ export default async function AccueilPage() {
               </span>
             </Link>
 
-            <Link href="/rechercher?q=chauffe-bain&tri=prix_asc"
+            {/* Recherche en deux mots : le backend applique minimumShouldMatch=1
+                au-dela d'un mot, ce qui donne un OU entre « chauffe » et
+                « chaudiere » et ramene donc les deux familles dans la meme page. */}
+            <Link href="/rechercher?q=chauffe%20chaudi%C3%A8re&tri=prix_desc"
               className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#78350F] to-[#1E293B] p-6 border border-white/10 hover:border-[#FBBF24]/50 transition-all">
-              <div className="absolute right-4 bottom-4 text-8xl opacity-10 select-none pointer-events-none">🚿</div>
-              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#FBBF24] to-transparent" />
-              <span className="text-[#FDE68A] text-[11px] font-bold uppercase tracking-widest mb-3 block">Chauffe-bain</span>
-              <p className="font-heading text-xl font-bold mb-1" style={{ color: 'white' }}>Gaz &amp; électrique</p>
-              <p className="text-slate-400 text-sm mb-5">Instantané · Cumulus · 10 à 100 L</p>
-              <span className="inline-flex items-center gap-1.5 text-[#FBBF24] text-sm font-semibold group-hover:gap-3 transition-all">
-                Voir les prix <ArrowRight size={13} />
-              </span>
-            </Link>
-
-            <Link href="/rechercher?q=chaudi%C3%A8re&tri=prix_asc"
-              className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#7F1D1D] to-[#1E293B] p-6 border border-white/10 hover:border-[#F87171]/50 transition-all">
               <div className="absolute right-4 bottom-4 text-8xl opacity-10 select-none pointer-events-none">♨️</div>
-              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#F87171] to-transparent" />
-              <span className="text-[#FCA5A5] text-[11px] font-bold uppercase tracking-widest mb-3 block">Chaudières</span>
-              <p className="font-heading text-xl font-bold mb-1" style={{ color: 'white' }}>Gaz &amp; condensation</p>
-              <p className="text-slate-400 text-sm mb-5">Murale · Mixte · Chauffage central</p>
-              <span className="inline-flex items-center gap-1.5 text-[#F87171] text-sm font-semibold group-hover:gap-3 transition-all">
-                Voir les prix <ArrowRight size={13} />
-              </span>
-            </Link>
-
-            <Link href="/categories/electromenager/climatisation"
-              className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0C4A6E] to-[#1E293B] p-6 border border-white/10 hover:border-[#38BDF8]/50 transition-all">
-              <div className="absolute right-4 bottom-4 text-8xl opacity-10 select-none pointer-events-none">❄️</div>
-              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#38BDF8] to-transparent" />
-              <span className="text-[#7DD3FC] text-[11px] font-bold uppercase tracking-widest mb-3 block">Climatiseurs</span>
-              <p className="font-heading text-xl font-bold mb-1" style={{ color: 'white' }}>Réversible chaud &amp; froid</p>
-              <p className="text-slate-400 text-sm mb-5">Inverter · 9 000 à 24 000 BTU</p>
-              <span className="inline-flex items-center gap-1.5 text-[#38BDF8] text-sm font-semibold group-hover:gap-3 transition-all">
+              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#FBBF24] to-transparent" />
+              <span className="text-[#FDE68A] text-[11px] font-bold uppercase tracking-widest mb-3 block">Chauffe-bain &amp; chaudières</span>
+              <p className="font-heading text-xl font-bold mb-1" style={{ color: 'white' }}>Gaz &amp; électrique</p>
+              <p className="text-slate-400 text-sm mb-5">Instantané · Cumulus · Murale · Mixte</p>
+              <span className="inline-flex items-center gap-1.5 text-[#FBBF24] text-sm font-semibold group-hover:gap-3 transition-all">
                 Voir les prix <ArrowRight size={13} />
               </span>
             </Link>
