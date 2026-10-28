@@ -5,6 +5,8 @@ import {
   TrendingUp, Tag, Smartphone, Home, Flame,
 } from 'lucide-react'
 import { getProduits } from '@/lib/api/produits'
+import AdSlot from '@/components/ads/AdSlot'
+import { AD_SLOTS } from '@/lib/ads'
 import type { Produit } from '@/types'
 import CarouselProduits from '@/components/ui/CarouselProduits'
 import Image from 'next/image'
@@ -334,6 +336,13 @@ export default async function AccueilPage() {
           </div>
         </div>
       </section>
+
+      {/* ── tp-accueil-milieu ── entre la sélection de saison et le carrousel
+          Tendances : haut-milieu de page, à l'écart de la bannière sponsorisée
+          pour ne pas empiler deux blocs publicitaires. */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <AdSlot slot={AD_SLOTS.accueilMilieu} />
+      </div>
 
       {/* ───────────────────────── TENDANCES ACTUELLES ───────────────────────── */}
       {tendances.length > 0 && (
