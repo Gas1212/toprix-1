@@ -304,13 +304,13 @@ export default async function AccueilPage() {
               </span>
             </Link>
 
-            <Link href="/rechercher?q=chauffe-eau&tri=prix_asc"
+            <Link href="/rechercher?q=chauffe-bain&tri=prix_asc"
               className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#78350F] to-[#1E293B] p-6 border border-white/10 hover:border-[#FBBF24]/50 transition-all">
               <div className="absolute right-4 bottom-4 text-8xl opacity-10 select-none pointer-events-none">🚿</div>
               <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#FBBF24] to-transparent" />
-              <span className="text-[#FDE68A] text-[11px] font-bold uppercase tracking-widest mb-3 block">Chauffe-eau</span>
-              <p className="font-heading text-xl font-bold mb-1" style={{ color: 'white' }}>Chauffe-bain &amp; cumulus</p>
-              <p className="text-slate-400 text-sm mb-5">Gaz · Électrique · Instantané</p>
+              <span className="text-[#FDE68A] text-[11px] font-bold uppercase tracking-widest mb-3 block">Chauffe-bain</span>
+              <p className="font-heading text-xl font-bold mb-1" style={{ color: 'white' }}>Gaz &amp; électrique</p>
+              <p className="text-slate-400 text-sm mb-5">Instantané · Cumulus · 10 à 100 L</p>
               <span className="inline-flex items-center gap-1.5 text-[#FBBF24] text-sm font-semibold group-hover:gap-3 transition-all">
                 Voir les prix <ArrowRight size={13} />
               </span>
