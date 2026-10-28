@@ -13,16 +13,12 @@ export const ADSENSE_CLIENT = 'ca-pub-8451378376537532'
 export const AD_SLOTS = {
   /**
    * tp-accueil-milieu — accueil, entre la sélection de saison et le carrousel
-   * Tendances. Hors plan de pose initial.
-   *
-   * EN ATTENTE d'identifiant : tant qu'il est vide, AdSlot ne rend aucun <ins>.
-   * Créer une unité display responsive dans la console et coller son
-   * data-ad-slot ici.
+   * Tendances. ACTIF. Hors plan de pose initial.
    *
    * L'accueil n'est pas exclu des Auto Ads : ce bloc s'y ajoute au lieu de les
    * remplacer, la page porte donc plus d'une annonce.
    */
-  accueilMilieu: '',
+  accueilMilieu: '7576620492',
 
   /**
    * tp-produit-bas — fiche /produit/[slug], sous le tableau comparatif des
