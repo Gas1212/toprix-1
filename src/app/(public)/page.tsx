@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import {
   Search, Zap, ArrowRight, CheckCircle2,
-  TrendingUp, Tag, Smartphone, Home, GraduationCap,
+  TrendingUp, Tag, Smartphone, Home, Flame,
 } from 'lucide-react'
 import { getProduits } from '@/lib/api/produits'
 import type { Produit } from '@/types'
@@ -81,8 +81,8 @@ export default async function AccueilPage() {
   // Chargement parallèle — 15 appels simultanés
   const [
     promosRes, smartphonesRes, electroRes, tvRes, laptopsRes, climaRes,
-    tabletteRes, imprimanteRes, stockageRes, bureauRes,
-    sacRes, cahierRes, styloRes, ramRes, papierRes,
+    chauffageRes, chauffeEauRes, chaudiereRes, radiateurRes,
+    convecteurRes, secheLingeRes, chauffeBainRes, poeleRes, couvertureRes,
   ] = await Promise.allSettled([
     getProduits({ en_promo: true }),
     getProduits({ categorie: 'telephonie/smartphone' }),
@@ -90,15 +90,15 @@ export default async function AccueilPage() {
     getProduits({ categorie: 'tv-et-son/televiseur' }),
     getProduits({ categorie: 'informatique/ordinateur-portable' }),
     getProduits({ categorie: 'electromenager/climatisation' }),
-    getProduits({ q: 'tablette' }),
-    getProduits({ q: 'imprimante' }),
-    getProduits({ q: 'clé usb' }),
-    getProduits({ categorie: 'bureau-et-papeterie' }),
-    getProduits({ q: 'sac à dos' }),
-    getProduits({ q: 'cahier' }),
-    getProduits({ q: 'stylo' }),
-    getProduits({ q: 'ram' }),
-    getProduits({ q: 'papier' }),
+    getProduits({ q: 'chauffage' }),
+    getProduits({ q: 'chauffe-eau' }),
+    getProduits({ q: 'chaudière' }),
+    getProduits({ q: 'radiateur' }),
+    getProduits({ q: 'convecteur' }),
+    getProduits({ q: 'sèche-linge' }),
+    getProduits({ q: 'chauffe-bain' }),
+    getProduits({ q: 'poêle' }),
+    getProduits({ q: 'couverture chauffante' }),
   ])
 
   const promos       = promosRes.status      === 'fulfilled' ? promosRes.value.data                    : []
@@ -107,29 +107,29 @@ export default async function AccueilPage() {
   const tvs          = tvRes.status          === 'fulfilled' ? tvRes.value.data.slice(0, 20)           : []
   const laptops      = laptopsRes.status     === 'fulfilled' ? laptopsRes.value.data.slice(0, 20)      : []
   const climatiseurs = climaRes.status       === 'fulfilled' ? climaRes.value.data.slice(0, 20)        : []
-  const tablettes    = tabletteRes.status    === 'fulfilled' ? tabletteRes.value.data.slice(0, 6)      : []
-  const imprimantes  = imprimanteRes.status  === 'fulfilled' ? imprimanteRes.value.data.slice(0, 6)    : []
-  const stockage     = stockageRes.status    === 'fulfilled' ? stockageRes.value.data.slice(0, 6)      : []
-  const fournitures  = bureauRes.status      === 'fulfilled' ? bureauRes.value.data.slice(0, 6)        : []
-  const sacs         = sacRes.status         === 'fulfilled' ? sacRes.value.data.slice(0, 6)           : []
-  const cahiers      = cahierRes.status      === 'fulfilled' ? cahierRes.value.data.slice(0, 6)        : []
-  const stylos       = styloRes.status       === 'fulfilled' ? styloRes.value.data.slice(0, 6)         : []
-  const rams         = ramRes.status         === 'fulfilled' ? ramRes.value.data.slice(0, 6)           : []
-  const papiers      = papierRes.status      === 'fulfilled' ? papierRes.value.data.slice(0, 6)        : []
+  const chauffages   = chauffageRes.status   === 'fulfilled' ? chauffageRes.value.data.slice(0, 6)    : []
+  const chauffeEaux  = chauffeEauRes.status  === 'fulfilled' ? chauffeEauRes.value.data.slice(0, 6)    : []
+  const chaudieres   = chaudiereRes.status   === 'fulfilled' ? chaudiereRes.value.data.slice(0, 6)     : []
+  const radiateurs   = radiateurRes.status   === 'fulfilled' ? radiateurRes.value.data.slice(0, 6)     : []
+  const convecteurs  = convecteurRes.status  === 'fulfilled' ? convecteurRes.value.data.slice(0, 6)    : []
+  const sechesLinge  = secheLingeRes.status  === 'fulfilled' ? secheLingeRes.value.data.slice(0, 6)    : []
+  const chauffeBains = chauffeBainRes.status === 'fulfilled' ? chauffeBainRes.value.data.slice(0, 6)   : []
+  const poeles       = poeleRes.status       === 'fulfilled' ? poeleRes.value.data.slice(0, 6)         : []
+  const couvertures  = couvertureRes.status  === 'fulfilled' ? couvertureRes.value.data.slice(0, 6)    : []
 
-  // Tendances rentrée — round-robin sur les familles back to school.
+  // Tendances hiver — round-robin sur les familles de chauffage.
   // Aucune famille ne monopolise le carrousel, et une famille vide (terme sans
   // résultat dans le catalogue) ne laisse pas de trou : les autres comblent.
   const TENDANCES_MAX = 24
-  const famillesRentree = [
-    laptops, tablettes, imprimantes, stockage, rams,
-    sacs, fournitures, cahiers, stylos, papiers,
+  const famillesHiver = [
+    climatiseurs, chauffages, chauffeEaux, chaudieres, radiateurs,
+    convecteurs, chauffeBains, sechesLinge, poeles, couvertures,
   ]
   const tendances: Produit[] = []
   const vus = new Set<string>()
-  const profondeurMax = Math.max(...famillesRentree.map(f => f.length))
+  const profondeurMax = Math.max(...famillesHiver.map(f => f.length))
   for (let i = 0; i < profondeurMax && tendances.length < TENDANCES_MAX; i++) {
-    for (const famille of famillesRentree) {
+    for (const famille of famillesHiver) {
       if (tendances.length >= TENDANCES_MAX) break
       const p = famille[i]
       // Dédoublonnage : un même produit peut matcher plusieurs termes
@@ -279,75 +279,75 @@ export default async function AccueilPage() {
         </div>
       </section>
 
-      {/* ══════════════════════ TENDANCE BACK TO SCHOOL ═════════════════════════ */}
+      {/* ═════════════════════ TENDANCE HIVER ═════════════════════════ */}
       <section className="py-10 sm:py-12 px-4 sm:px-6 bg-[#0F172A]">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between mb-6">
             <div>
               <p className="text-[#F97316] text-xs font-semibold uppercase tracking-widest mb-1 flex items-center gap-1.5">
-                <GraduationCap size={12} /> Tendance Back to School
+                <Flame size={12} /> Tendance Hiver
               </p>
-              <h2 className="font-heading text-2xl md:text-3xl" style={{ color: 'white' }}>Rentrée 2026</h2>
+              <h2 className="font-heading text-2xl md:text-3xl" style={{ color: 'white' }}>Chauffage &amp; Fin d’année 2026</h2>
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
 
-            <Link href="/categories/informatique/ordinateur-portable"
-              className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#312E81] to-[#1E293B] p-6 border border-white/10 hover:border-[#818CF8]/50 transition-all">
-              <div className="absolute right-4 bottom-4 text-8xl opacity-10 select-none pointer-events-none">💻</div>
-              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#818CF8] to-transparent" />
-              <span className="text-[#A5B4FC] text-[11px] font-bold uppercase tracking-widest mb-3 block">PC portables</span>
-              <p className="font-heading text-xl font-bold mb-1" style={{ color: 'white' }}>Études &amp; bureautique</p>
-              <p className="text-slate-400 text-sm mb-5">Core i5 · Ryzen 5 · SSD 512 Go</p>
-              <span className="inline-flex items-center gap-1.5 text-[#818CF8] text-sm font-semibold group-hover:gap-3 transition-all">
+            <Link href="/rechercher?q=chauffage&tri=prix_asc"
+              className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#7C2D12] to-[#1E293B] p-6 border border-white/10 hover:border-[#FB923C]/50 transition-all">
+              <div className="absolute right-4 bottom-4 text-8xl opacity-10 select-none pointer-events-none">🔥</div>
+              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#FB923C] to-transparent" />
+              <span className="text-[#FDBA74] text-[11px] font-bold uppercase tracking-widest mb-3 block">Chauffage</span>
+              <p className="font-heading text-xl font-bold mb-1" style={{ color: 'white' }}>Radiateurs &amp; convecteurs</p>
+              <p className="text-slate-400 text-sm mb-5">Bain d’huile · Soufflant · Céramique</p>
+              <span className="inline-flex items-center gap-1.5 text-[#FB923C] text-sm font-semibold group-hover:gap-3 transition-all">
                 Voir les prix <ArrowRight size={13} />
               </span>
             </Link>
 
-            <Link href="/rechercher?q=tablette&tri=prix_asc"
-              className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#4C1D95] to-[#1E293B] p-6 border border-white/10 hover:border-[#A78BFA]/50 transition-all">
-              <div className="absolute right-4 bottom-4 text-8xl opacity-10 select-none pointer-events-none">📱</div>
-              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#A78BFA] to-transparent" />
-              <span className="text-[#C4B5FD] text-[11px] font-bold uppercase tracking-widest mb-3 block">Tablettes</span>
-              <p className="font-heading text-xl font-bold mb-1" style={{ color: 'white' }}>Cours &amp; prise de notes</p>
-              <p className="text-slate-400 text-sm mb-5">Android · iPad · Stylet · Clavier</p>
-              <span className="inline-flex items-center gap-1.5 text-[#A78BFA] text-sm font-semibold group-hover:gap-3 transition-all">
-                Voir les prix <ArrowRight size={13} />
-              </span>
-            </Link>
-
-            <Link href="/rechercher?q=imprimante&tri=prix_asc"
-              className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#134E4A] to-[#1E293B] p-6 border border-white/10 hover:border-[#2DD4BF]/50 transition-all">
-              <div className="absolute right-4 bottom-4 text-8xl opacity-10 select-none pointer-events-none">🖨️</div>
-              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#2DD4BF] to-transparent" />
-              <span className="text-[#5EEAD4] text-[11px] font-bold uppercase tracking-widest mb-3 block">Imprimantes</span>
-              <p className="font-heading text-xl font-bold mb-1" style={{ color: 'white' }}>Jet d&apos;encre &amp; laser</p>
-              <p className="text-slate-400 text-sm mb-5">Multifonction · Tank · Wi-Fi</p>
-              <span className="inline-flex items-center gap-1.5 text-[#2DD4BF] text-sm font-semibold group-hover:gap-3 transition-all">
-                Voir les prix <ArrowRight size={13} />
-              </span>
-            </Link>
-
-            <Link href="/rechercher?q=cl%C3%A9%20usb&tri=prix_asc"
+            <Link href="/rechercher?q=chauffe-eau&tri=prix_asc"
               className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#78350F] to-[#1E293B] p-6 border border-white/10 hover:border-[#FBBF24]/50 transition-all">
-              <div className="absolute right-4 bottom-4 text-8xl opacity-10 select-none pointer-events-none">💾</div>
+              <div className="absolute right-4 bottom-4 text-8xl opacity-10 select-none pointer-events-none">🚿</div>
               <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#FBBF24] to-transparent" />
-              <span className="text-[#FDE68A] text-[11px] font-bold uppercase tracking-widest mb-3 block">Stockage</span>
-              <p className="font-heading text-xl font-bold mb-1" style={{ color: 'white' }}>Clés USB &amp; SSD</p>
-              <p className="text-slate-400 text-sm mb-5">64 Go à 2 To · USB-C · NVMe</p>
+              <span className="text-[#FDE68A] text-[11px] font-bold uppercase tracking-widest mb-3 block">Chauffe-eau</span>
+              <p className="font-heading text-xl font-bold mb-1" style={{ color: 'white' }}>Chauffe-bain &amp; cumulus</p>
+              <p className="text-slate-400 text-sm mb-5">Gaz · Électrique · Instantané</p>
               <span className="inline-flex items-center gap-1.5 text-[#FBBF24] text-sm font-semibold group-hover:gap-3 transition-all">
                 Voir les prix <ArrowRight size={13} />
               </span>
             </Link>
 
-            <Link href="/categories/bureau-et-papeterie"
-              className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#881337] to-[#1E293B] p-6 border border-white/10 hover:border-[#FB7185]/50 transition-all">
-              <div className="absolute right-4 bottom-4 text-8xl opacity-10 select-none pointer-events-none">🎒</div>
-              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#FB7185] to-transparent" />
-              <span className="text-[#FDA4AF] text-[11px] font-bold uppercase tracking-widest mb-3 block">Fournitures</span>
-              <p className="font-heading text-xl font-bold mb-1" style={{ color: 'white' }}>Bureau &amp; papeterie</p>
-              <p className="text-slate-400 text-sm mb-5">Sacs à dos · Cahiers · Stylos · Papier</p>
-              <span className="inline-flex items-center gap-1.5 text-[#FB7185] text-sm font-semibold group-hover:gap-3 transition-all">
+            <Link href="/rechercher?q=chaudi%C3%A8re&tri=prix_asc"
+              className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#7F1D1D] to-[#1E293B] p-6 border border-white/10 hover:border-[#F87171]/50 transition-all">
+              <div className="absolute right-4 bottom-4 text-8xl opacity-10 select-none pointer-events-none">♨️</div>
+              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#F87171] to-transparent" />
+              <span className="text-[#FCA5A5] text-[11px] font-bold uppercase tracking-widest mb-3 block">Chaudières</span>
+              <p className="font-heading text-xl font-bold mb-1" style={{ color: 'white' }}>Gaz &amp; condensation</p>
+              <p className="text-slate-400 text-sm mb-5">Murale · Mixte · Chauffage central</p>
+              <span className="inline-flex items-center gap-1.5 text-[#F87171] text-sm font-semibold group-hover:gap-3 transition-all">
+                Voir les prix <ArrowRight size={13} />
+              </span>
+            </Link>
+
+            <Link href="/categories/electromenager/climatisation"
+              className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0C4A6E] to-[#1E293B] p-6 border border-white/10 hover:border-[#38BDF8]/50 transition-all">
+              <div className="absolute right-4 bottom-4 text-8xl opacity-10 select-none pointer-events-none">❄️</div>
+              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#38BDF8] to-transparent" />
+              <span className="text-[#7DD3FC] text-[11px] font-bold uppercase tracking-widest mb-3 block">Climatiseurs</span>
+              <p className="font-heading text-xl font-bold mb-1" style={{ color: 'white' }}>Réversible chaud &amp; froid</p>
+              <p className="text-slate-400 text-sm mb-5">Inverter · 9 000 à 24 000 BTU</p>
+              <span className="inline-flex items-center gap-1.5 text-[#38BDF8] text-sm font-semibold group-hover:gap-3 transition-all">
+                Voir les prix <ArrowRight size={13} />
+              </span>
+            </Link>
+
+            <Link href="/rechercher?en_promo=1&tri=prix_desc"
+              className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#9A3412] to-[#1E293B] p-6 border border-white/10 hover:border-[#F97316]/50 transition-all">
+              <div className="absolute right-4 bottom-4 text-8xl opacity-10 select-none pointer-events-none">🎁</div>
+              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#F97316] to-transparent" />
+              <span className="text-[#FDBA74] text-[11px] font-bold uppercase tracking-widest mb-3 block">Promos</span>
+              <p className="font-heading text-xl font-bold mb-1" style={{ color: 'white' }}>Fin d’année 2026</p>
+              <p className="text-slate-400 text-sm mb-5">Toutes les offres du moment</p>
+              <span className="inline-flex items-center gap-1.5 text-[#F97316] text-sm font-semibold group-hover:gap-3 transition-all">
                 Voir les prix <ArrowRight size={13} />
               </span>
             </Link>
@@ -362,9 +362,9 @@ export default async function AccueilPage() {
           <div className="max-w-7xl mx-auto">
             <SectionHeader
               eyebrow="Produits de saison"
-              title="Indispensables de la rentrée"
+              title="Indispensables de l’hiver"
               icon={TrendingUp}
-              href="/categories/informatique/ordinateur-portable"
+              href="/categories/electromenager/climatisation"
               linkLabel="Tout voir"
             />
             <CarouselProduits produits={tendances} />
