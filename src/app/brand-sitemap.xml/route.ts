@@ -31,15 +31,17 @@ export async function GET() {
 
     const { data: marques } = await response.json()
 
-    // Un slug contenant une espace est publié par /marques/ mais /marques/<slug>/
-    // répond 404 : l'endpoint détail ancre son regex sur la valeur brute, alors
-    // que la liste normalise le slug. 173 marques étaient dans ce cas, soit 6 975
-    // produits. Tant que le backend n'est pas corrigé, ne pas soumettre ces URLs
-    // au crawl — elles sont mortes. Ce filtre devient inutile après correctif.
+    // L'API ne décode pas le pourcent-encodage du segment d'URL : elle compare la
+    // chaîne encodée telle quelle au champ brand. Vérifié le 29/10/2026 —
+    // /marques/c'fresh/ répond 200, /marques/c%27fresh/ répond 404. Tout slug qui
+    // doit être encodé pour voyager dans une URL est donc injoignable : les 173
+    // slugs à espace (6 975 produits), rosières, w&t, black+decker, g&g. Ne pas
+    // les soumettre au crawl tant que le backend ne décode pas le segment.
+    // Les apostrophes passent (c'fresh, grill'o) : elles sont licites en clair.
     const publiables = ((marques || []) as Marque[]).filter(
       (m) =>
         m?.slug &&
-        !/\s/.test(m.slug) &&
+        /^[a-z0-9'-]+$/.test(m.slug) &&
         (m.nombre_produits ?? 0) >= MIN_PRODUITS
     )
 
