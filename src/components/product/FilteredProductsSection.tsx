@@ -37,6 +37,17 @@ const BOUTIQUES_LABEL: Record<string, string> = {
  */
 const AD_APRES_DEFAUT = 12
 
+/**
+ * Nombre minimum de produits pour qu'une page courte reçoive le bloc.
+ *
+ * Sous ce seuil la page est trop maigre : une annonce sur une liste de une à
+ * cinq cartes est précisément ce qu'AdSense qualifie de contenu de faible
+ * valeur. Mesuré le 29/10/2026 : deux tiers des pages marque n'atteignaient
+ * pas adApres, donc ne portaient aucune annonce, alors qu'un quart d'entre
+ * elles avaient de 6 à 12 produits — assez pour être monétisées.
+ */
+const AD_MIN_PRODUITS = 6
+
 // ─── Props ────────────────────────────────────────────────────────────────────
 
 interface FilteredProductsSectionProps {
@@ -334,6 +345,13 @@ export default function FilteredProductsSection({
                     return [carte, <AdSlot key="tp-liste-milieu" slot={adSlot} inGrid />]
                   })}
                 </div>
+
+                {/* Liste trop courte pour une insertion en milieu de grille :
+                    le bloc passe sous la grille. Placé là il ne laisse aucune
+                    cellule vide en fin de rangée, quelle que soit la largeur. */}
+                {adSlot && products.length <= adApres && products.length >= AD_MIN_PRODUITS && (
+                  <AdSlot key="tp-liste-milieu" slot={adSlot} />
+                )}
                 {meta && meta.total_pages > 1 && (
                   <Pagination
                     currentPage={page}
