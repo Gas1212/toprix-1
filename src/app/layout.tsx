@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter, Space_Grotesk } from 'next/font/google'
 import Script from 'next/script'
-import { SpeedInsights } from '@vercel/speed-insights/next'
 import AdSenseScript from '@/components/ads/AdSenseScript'
 import MessengerButton from '@/components/chat/MessengerButton'
 import './globals.css'
@@ -131,7 +130,6 @@ gtag('config','${GA4_ID}');`}
         </noscript>
 
         {children}
-        <SpeedInsights />
 
         {/* ── 4. Google AdSense ── désactivé sur /rechercher */}
         <AdSenseScript />
