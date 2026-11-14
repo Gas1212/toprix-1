@@ -20,6 +20,14 @@ export default defineConfig({
     name: 'toprix',
     entrypoint: 'vinext/server/fetch-handler',
     compatibilityDate: '2026-11-02',
+    // Production : le Worker est l'origine de ces deux noms. Cloudflare crée
+    // les enregistrements DNS et les certificats ; un nom qui porte déjà un
+    // CNAME (l'ancien www vers Vercel) doit être supprimé au préalable.
+    domains: ['toprix.tn', 'www.toprix.tn'],
+    // Plus d'adresse de test : ni toprix.<compte>.workers.dev, ni URLs de
+    // prévisualisation. Le site n'est joignable que par son vrai domaine.
+    workersDev: false,
+    previewUrls: false,
     assets: {
       htmlHandling: 'none',
       notFoundHandling: 'none',
